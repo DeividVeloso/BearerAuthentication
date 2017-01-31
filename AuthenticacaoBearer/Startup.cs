@@ -17,6 +17,7 @@ namespace AuthenticacaoBearer
             HttpConfiguration config = new HttpConfiguration();
 
             ConfigureWebApi(config);
+            ConfigureOAuth(app);
 
             //Deixa o serviço publico sem nenhuma restrição de acesso entre dominios diferentes
             //Configurações iniciais  para que meu serviço rode
@@ -35,7 +36,7 @@ namespace AuthenticacaoBearer
                 );
         }
 
-        public void ConfigureOAuth(IAppBuilder app, IUserService service)
+        public void ConfigureOAuth(IAppBuilder app)
         {
             //Opções de autorização no meu servidor
             OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
@@ -47,7 +48,8 @@ namespace AuthenticacaoBearer
                 //Esse token terar duração de 2 horas
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
                 //Gera um token baseado no retorno da classe AuthorizationServerProvider
-                Provider = new AuthorizationServerProvider(service)
+                //Podia ser um provider do Facebook, Google.
+                Provider = new AuthorizationServerProvider()
             };
             // Token Generation
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
